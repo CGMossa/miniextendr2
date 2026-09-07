@@ -87,3 +87,19 @@ The first CRAN-like CI run also reproduced #1326 verbatim: `compare_proxy`
 segfaulted at address `0xa1` while checking `result$total` in the DataFusion
 SUM test. PR #1486 already fixes that Arrow buffer provenance bug and has
 passed its complete CI suite; this PR does not duplicate that runtime change.
+
+The new-monorepo smoke initially selected the June 24 system installation of
+cargo-revendor, which lacks this PR's aliased-dependency freeze fix. Its
+native build passed but its tarball install retained the sibling path.
+Rebuilt with `CARGO_TARGET_DIR="$PWD/target" just revendor-build` and prepended
+`$PWD/target/debug` to PATH for the smoke run; the user's global tool was not
+replaced. The R renderer regression and full standard scaffolder suite pass
+(840 assertions, zero failures/warnings), as do `just fmt`, `just check`,
+`just test -- monorepo` (including the UI leg), `just clippy -- -D warnings`
+and all three CI Clippy configurations.
+
+With the worktree-built cargo-revendor, a newly scaffolded monorepo completed
+`miniextendr_build()` through the native bootstrap, vendored tarball install,
+and roxygen pass. Its installed `core_greeting()`, `add(2, 3)` and `hello("R")`
+returned the expected values. The source manifest and framework lockfile
+remained unchanged.
