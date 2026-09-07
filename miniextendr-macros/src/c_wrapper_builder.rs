@@ -405,6 +405,12 @@ impl CWrapperContext {
         }
     }
 
+    /// Use the wrapper expansion's scope for the synthetic call parameter.
+    /// User type spans can come from a different macro_rules expansion (#1489).
+    fn call_context_ident() -> syn::Ident {
+        format_ident!("__miniextendr_call")
+    }
+
     /// Builds the C wrapper's parameter list from the Rust function signature.
     ///
     /// Returns a tuple of:
@@ -419,7 +425,8 @@ impl CWrapperContext {
         let mut sexp_idents: Vec<syn::Ident> = Vec::new();
 
         // First param is always __miniextendr_call for error context
-        c_params.push(quote!(__miniextendr_call: ::miniextendr_api::SEXP));
+        let call_context_ident = Self::call_context_ident();
+        c_params.push(quote!(#call_context_ident: ::miniextendr_api::SEXP));
 
         // For instance methods, add self_sexp parameter
         if self.has_self {
@@ -456,7 +463,7 @@ impl CWrapperContext {
     ///
     /// Used by the main-thread wrapper where all conversions happen inline.
     fn build_conversion_stmts(&self, sexp_idents: &[syn::Ident]) -> Vec<TokenStream> {
-        let mut builder = crate::RustConversionBuilder::new();
+        let mut builder = crate::RustConversionBuilder::new(Self::call_context_ident());
         if self.strict {
             builder = builder.with_strict();
         }
@@ -481,7 +488,7 @@ impl CWrapperContext {
         &self,
         sexp_idents: &[syn::Ident],
     ) -> (Vec<TokenStream>, Vec<TokenStream>) {
-        let mut builder = crate::RustConversionBuilder::new();
+        let mut builder = crate::RustConversionBuilder::new(Self::call_context_ident());
         if self.strict {
             builder = builder.with_strict();
         }

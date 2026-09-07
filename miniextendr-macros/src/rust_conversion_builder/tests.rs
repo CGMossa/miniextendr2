@@ -7,7 +7,7 @@ fn parse_param(s: &str) -> syn::FnArg {
 
 #[test]
 fn test_unit_type() {
-    let builder = RustConversionBuilder::new();
+    let builder = RustConversionBuilder::new(syn::parse_quote!(__miniextendr_call));
     let param = parse_param("_unused: ()");
     if let syn::FnArg::Typed(pat_type) = param {
         let sexp_ident = syn::Ident::new("arg_0", proc_macro2::Span::call_site());
@@ -19,7 +19,7 @@ fn test_unit_type() {
 
 #[test]
 fn test_basic_conversion() {
-    let builder = RustConversionBuilder::new();
+    let builder = RustConversionBuilder::new(syn::parse_quote!(__miniextendr_call));
     let param = parse_param("x: i32");
     if let syn::FnArg::Typed(pat_type) = param {
         let sexp_ident = syn::Ident::new("arg_0", proc_macro2::Span::call_site());
@@ -31,7 +31,7 @@ fn test_basic_conversion() {
 
 #[test]
 fn test_slice_conversion() {
-    let builder = RustConversionBuilder::new();
+    let builder = RustConversionBuilder::new(syn::parse_quote!(__miniextendr_call));
     let param = parse_param("x: &[i32]");
     if let syn::FnArg::Typed(pat_type) = param {
         let sexp_ident = syn::Ident::new("arg_0", proc_macro2::Span::call_site());
@@ -45,7 +45,7 @@ fn test_slice_conversion() {
 fn test_str_conversion_main_thread_borrows_zero_copy() {
     // Main-thread path (`build_conversion`): `&str` borrows R's CHARSXP pool
     // directly — a single zero-copy `TryFromSexp` binding, no `String` allocation.
-    let builder = RustConversionBuilder::new();
+    let builder = RustConversionBuilder::new(syn::parse_quote!(__miniextendr_call));
     let param = parse_param("s: &str");
     if let syn::FnArg::Typed(pat_type) = param {
         let sexp_ident = syn::Ident::new("arg_0", proc_macro2::Span::call_site());
@@ -63,7 +63,7 @@ fn test_str_conversion_main_thread_borrows_zero_copy() {
 fn test_str_conversion_worker_copies_then_borrows() {
     // Worker path (`build_conversion_split`): `&str` must be owned-then-borrowed
     // because a borrowed view over R's CHARSXP pool is `!Send`.
-    let builder = RustConversionBuilder::new();
+    let builder = RustConversionBuilder::new(syn::parse_quote!(__miniextendr_call));
     let param = parse_param("s: &str");
     if let syn::FnArg::Typed(pat_type) = param {
         let sexp_ident = syn::Ident::new("arg_0", proc_macro2::Span::call_site());
@@ -77,7 +77,8 @@ fn test_str_conversion_worker_copies_then_borrows() {
 
 #[test]
 fn test_coercion() {
-    let builder = RustConversionBuilder::new().with_coerce_param("x".to_string());
+    let builder = RustConversionBuilder::new(syn::parse_quote!(__miniextendr_call))
+        .with_coerce_param("x".to_string());
     let param = parse_param("x: u16");
     if let syn::FnArg::Typed(pat_type) = param {
         let sexp_ident = syn::Ident::new("arg_0", proc_macro2::Span::call_site());
