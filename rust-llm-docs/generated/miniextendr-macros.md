@@ -2277,10 +2277,10 @@ Returns a flat list of all conversion statements, in parameter order.
 #### `new`
 
 ```rust
-fn new() -> Self
+fn new(call_context_ident: syn::Ident) -> Self
 ```
 
-Create a new conversion builder.
+Create a conversion builder using the wrapper's call-context parameter.
 
 #### `with_coerce_all`
 

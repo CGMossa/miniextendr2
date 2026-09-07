@@ -26,7 +26,7 @@ Traits with impls: 28
 | `Clone` | 22 | 22 |
 | `CloneToUninit` | 22 | 0 |
 | `ToOwned` | 22 | 0 |
-| `Default` | 19 | 19 |
+| `Default` | 18 | 18 |
 | `Parse` | 13 | 13 |
 | `Eq` | 12 | 12 |
 | `PartialEq` | 12 | 12 |
@@ -100,7 +100,7 @@ Traits with impls: 28
 | `CallAttribution` | `` | concrete | 1 | miniextendr-macros/src/r_wrapper_builder.rs:323 |
 | `SeveralOkContainer` | `` | concrete | 1 | miniextendr-macros/src/type_inspect.rs:149 |
 
-## `Default` — 19 impls
+## `Default` — 18 impls
 
 | for-type | generics | kind | #items | span |
 |---|---|---|---|---|
@@ -122,7 +122,6 @@ Traits with impls: 28
 | `PreconditionOptions` | `` | concrete | 1 | miniextendr-macros/src/r_preconditions.rs:83 |
 | `CallAttribution` | `` | concrete | 1 | miniextendr-macros/src/r_wrapper_builder.rs:323 |
 | `RoxygenBuilder` | `` | concrete | 1 | miniextendr-macros/src/r_wrapper_builder.rs:643 |
-| `RustConversionBuilder` | `` | concrete | 1 | miniextendr-macros/src/rust_conversion_builder.rs:621 |
 
 ## `Parse` — 13 impls
 
