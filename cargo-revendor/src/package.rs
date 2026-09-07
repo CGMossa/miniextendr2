@@ -141,8 +141,8 @@ fn add_versions_to_path_deps(
 
     for section in &["dependencies", "build-dependencies", "dev-dependencies"] {
         if let Some(table) = doc.get_mut(section).and_then(|v| v.as_table_mut()) {
-            for name in local_names.iter() {
-                if let Some(dep) = table.get_mut(name)
+            for (alias, dep) in table.iter_mut() {
+                if local_names.contains(crate::vendor::dependency_package_name(alias.get(), dep))
                     && ensure_version(dep)
                 {
                     changed = true;
@@ -222,4 +222,34 @@ fn find_crate_file(package_dir: &Path, name: &str) -> Result<PathBuf> {
             package_dir.display()
         )
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn packaging_adds_versions_to_renamed_local_dependencies() {
+        let manifest = r#"[dependencies]
+core_library = { package = "core", path = "../core" }
+[build-dependencies.build_core]
+package = "core"
+path = "../core"
+"#;
+        let names = std::collections::HashSet::from(["core"]);
+        let rewritten: toml_edit::DocumentMut =
+            add_versions_to_path_deps(manifest, &names).parse().unwrap();
+        assert_eq!(
+            rewritten["dependencies"]["core_library"]["version"].as_str(),
+            Some("*")
+        );
+        assert_eq!(
+            rewritten["build-dependencies"]["build_core"]["version"].as_str(),
+            Some("*")
+        );
+        assert_eq!(
+            rewritten["dependencies"]["core_library"]["package"].as_str(),
+            Some("core")
+        );
+    }
 }

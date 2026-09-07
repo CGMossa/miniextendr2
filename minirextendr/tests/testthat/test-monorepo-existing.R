@@ -44,7 +44,9 @@ test_that("existing root and virtual workspaces produce distinct binding package
     expect_identical(normalizePath(dep$path), normalizePath(core))
     expect_identical(readLines(file.path(core, "Cargo.toml")), manifest_before)
     source <- paste(readLines(file.path(rust_dir, "lib.rs")), collapse = "\n")
-    expect_false(grepl("::hello()", source, fixed = TRUE))
+    active_source <- readLines(file.path(rust_dir, "lib.rs"))
+    active_source <- active_source[!grepl("^//", active_source)]
+    expect_false(any(grepl("::hello()", active_source, fixed = TRUE)))
     expect_match(source, "core_library", fixed = TRUE)
     expect_false(grepl("{{", source, fixed = TRUE))
   }

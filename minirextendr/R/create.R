@@ -115,7 +115,7 @@ create_miniextendr_monorepo <- function(path, package = basename(path),
     crate_name = crate_name,
     crate_name_rs = to_rust_name(crate_name),
     crate_path = paste0("../../../", crate_name),
-    core_example = TRUE,
+    core_example_prefix = "",
     rpkg_name = rpkg_name,
     features_var = "CARGO_FEATURES",
     year = format(Sys.Date(), "%Y")
@@ -413,7 +413,7 @@ use_miniextendr <- function(path = ".",
     ))
     # Existing libraries have arbitrary APIs; only the newly created core
     # template is known to provide hello().
-    data$core_example <- FALSE
+    data$core_example_prefix <- "// "
     create_rpkg_subdirectory(data, rpkg_name = rpkg_name)
 
     # Auto-run autoconf if available

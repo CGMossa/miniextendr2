@@ -28,3 +28,30 @@ The first regression run passed Cargo metadata assertions for both layouts but
 failed two message assertions: CLI wrapped “from this workspace root” across
 lines. The assertion now normalizes display whitespace before checking the
 workspace-root build instructions.
+
+The end-to-end root-package build then reached a second assumption in
+`cargo-revendor`: workspace-root discovery walked parents looking for the
+literal `[workspace]` table and aborted on a standalone library. It now uses
+`cargo locate-project --workspace`, which recognizes Cargo's implicit
+single-package workspaces as well as explicit workspace membership.
+
+The complete Rust suite also caught the CLI's embedded-template consumer: it
+did not supply the newly required core path. The CLI now supplies the same
+workspace-derived dependency path, distinct binding package name and commented
+existing-API example as the R scaffolder. Its `init use --crate-name` selects
+an explicit virtual-workspace member. Both template consumers retain simple
+string substitution; a comment-prefix variable controls whether the known
+new-library `hello()` example is enabled.
+
+The new Cargo workspace-root regression caught macOS's `/var` versus
+`/private/var` spelling: `cargo locate-project` preserves the input spelling.
+The helper canonicalizes the returned directory, retaining its previous path
+identity contract.
+
+With standalone packaging working, the real tarball install exposed a second
+vendoring bug: renamed path dependencies were looked up by the dependency key
+rather than their `package` field, leaving `core_library` pointed at the
+workspace root inside the tarball. Freeze, vendored-path repair and package
+version insertion now resolve the actual package name while preserving the
+alias and dependency options. Regression coverage exercises inline and table
+forms, including build dependencies.

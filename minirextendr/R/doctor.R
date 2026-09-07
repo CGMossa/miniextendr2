@@ -133,7 +133,8 @@ miniextendr_doctor <- function(path = ".", webr = FALSE) {
         paste0("vendor-bound Cargo.toml [", entry$section, "]: ", entry$crate)
       }, character(1)))
     }
-    frozen_names <- vapply(frozen, `[[`, character(1), "crate")
+    frozen_deps <- Filter(function(entry) entry$section == "dependencies", frozen)
+    frozen_names <- vapply(frozen_deps, `[[`, character(1), "crate")
     rel_path_deps <- Filter(function(entry) !entry$crate %in% frozen_names,
                             parse_relative_path_deps(cargo_contents))
     if (length(rel_path_deps) > 0L) {

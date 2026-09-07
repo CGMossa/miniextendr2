@@ -599,7 +599,7 @@ to_rust_name <- function(name) {
   gsub("[.-]", "_", name)
 }
 
-#' Get package name from Cargo.toml
+#' Select a Rust library from Cargo workspace metadata
 #'
 #' @param cargo_path Path to Cargo.toml file
 #' @param crate_name Optional workspace package to expose to R
@@ -618,7 +618,7 @@ get_monorepo_crate <- function(cargo_path = file.path(usethis::proj_get(), "Carg
     cli::cli_abort('Monorepo scaffolding requires {.pkg jsonlite}. Run {.code install.packages("jsonlite")}.')
   }
 
-  # Let Cargo resolve workspace members, inherited names and custom lib paths.
+  # Let Cargo resolve workspace members and custom library targets.
   # Keep stderr separate: Cargo diagnostics are not part of the JSON document.
   diagnostics <- tempfile("cargo-metadata-")
   on.exit(unlink(diagnostics), add = TRUE)
