@@ -55,3 +55,13 @@ workspace root inside the tarball. Freeze, vendored-path repair and package
 version insertion now resolve the actual package name while preserving the
 alias and dependency options. Regression coverage exercises inline and table
 forms, including build dependencies.
+
+The successful local-framework builds revealed one last source-tree side
+effect: `cargo package` appended `[[patch.unused]] core` to the framework
+workspace's existing `Cargo.lock` while using transient patches. Packaging now
+snapshots/restores that existing lock alongside its manifests; a real
+standalone-package regression checks that the lock's bytes remain unchanged.
+
+An unrelated parallel telemetry test emitted a swallowed assertion panic during
+validation. It is tracked separately in #1492. The R package check's existing
+AGENTS.md NOTE is tracked by #1409 and already fixed in open PR #1487.

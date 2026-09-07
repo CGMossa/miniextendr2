@@ -51,6 +51,13 @@ pub fn package_local_crates(
         // iteration, or earlier via `?` / panic unwind).
         let _inner_guard = crate::manifest_guard::ManifestGuard::snapshot(&pkg.manifest_path)?;
         let _ws_guard = crate::manifest_guard::ManifestGuard::snapshot(&ws_manifest)?;
+        // Cargo package can record transient patches as [[patch.unused]] in
+        // an existing source-workspace lockfile. Restore that file too.
+        let ws_lock = ws_root.join("Cargo.lock");
+        let _ws_lock_guard = ws_lock
+            .is_file()
+            .then(|| crate::manifest_guard::ManifestGuard::snapshot(&ws_lock))
+            .transpose()?;
 
         // Temporarily rewrite Cargo.toml to add version = "*" to path-only deps
         // (cargo package rejects path deps without a version)
@@ -227,6 +234,57 @@ fn find_crate_file(package_dir: &Path, name: &str) -> Result<PathBuf> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn packaging_preserves_existing_source_lockfile() {
+        let dir = tempfile::tempdir().unwrap();
+        let mut packages = Vec::new();
+        for name in ["core", "unused-helper"] {
+            let path = dir.path().join(name);
+            std::fs::create_dir_all(path.join("src")).unwrap();
+            std::fs::write(path.join("src/lib.rs"), "pub fn hello() {}\n").unwrap();
+            let manifest_path = path.join("Cargo.toml");
+            std::fs::write(
+                &manifest_path,
+                format!("[package]\nname = \"{name}\"\nversion = \"0.1.0\"\nedition = \"2024\"\n"),
+            )
+            .unwrap();
+            packages.push(LocalPackage {
+                name: name.into(),
+                version: "0.1.0".into(),
+                path,
+                manifest_path,
+            });
+        }
+        let output = Command::new("cargo")
+            .args(["generate-lockfile", "--offline", "--manifest-path"])
+            .arg(&packages[0].manifest_path)
+            .output()
+            .unwrap();
+        assert!(
+            output.status.success(),
+            "{}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        let lock = packages[0].path.join("Cargo.lock");
+        let before = std::fs::read(&lock).unwrap();
+        let staging = dir.path().join("staging");
+        std::fs::create_dir(&staging).unwrap();
+        let archives = package_local_crates(
+            &packages[..1],
+            &packages,
+            &packages[0].manifest_path,
+            &staging,
+            true,
+            crate::Verbosity(0),
+        )
+        .unwrap();
+        assert!(
+            archives[0].1.is_file(),
+            "expected cargo package to produce an archive"
+        );
+        assert_eq!(std::fs::read(&lock).unwrap(), before);
+    }
 
     #[test]
     fn packaging_adds_versions_to_renamed_local_dependencies() {
