@@ -1126,10 +1126,10 @@ pub fn freeze_manifest(
         }
     }
     if !patch_table.is_empty() {
-        doc.insert("patch", toml_edit::Item::Table(toml_edit::Table::new()));
-        if let Some(patch) = doc.get_mut("patch").and_then(|v| v.as_table_mut()) {
-            patch.insert("crates-io", toml_edit::Item::Table(patch_table));
-        }
+        let mut patch = toml_edit::Table::new();
+        patch.set_implicit(true);
+        patch.insert("crates-io", toml_edit::Item::Table(patch_table));
+        doc.insert("patch", toml_edit::Item::Table(patch));
     }
 
     std::fs::write(manifest_path, doc.to_string())?;
@@ -1905,6 +1905,8 @@ miniextendr-macros-core = { path = "/tmp/mc" }
 
         freeze_manifest(&manifest, &vendor, &[], false, false, Verbosity(0)).unwrap();
         let result = std::fs::read_to_string(&manifest).unwrap();
+        assert!(!result.lines().any(|line| line.trim() == "[patch]"));
+        assert!(result.contains("[patch.crates-io]"));
         let api = result.find("miniextendr-api =").unwrap();
         let lint = result.find("miniextendr-lint =").unwrap();
         let macros = result.find("miniextendr-macros =").unwrap();
