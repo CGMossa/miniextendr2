@@ -64,4 +64,13 @@ standalone-package regression checks that the lock's bytes remain unchanged.
 
 An unrelated parallel telemetry test emitted a swallowed assertion panic during
 validation. It is tracked separately in #1492. The R package check's existing
-AGENTS.md NOTE is tracked by #1409 and already fixed in open PR #1487.
+AGENTS.md and miniextendr Rd cross-reference notes are tracked by #1409/#1410
+and already fixed in open PR #1487.
+
+Validation after rebasing onto main's #1485 merge: all Rust test legs and
+three CI clippy configurations passed; the R CI suite passed 836 assertions.
+R configure/install/force-document, template synchronization and LLM corpus
+checks passed with no generated drift. The two-layout integration test runs
+four real builds and verifies installed calls plus manifest restoration; its
+initial and rebased runs each passed all 40 assertions. The final run also
+left the framework workspace manifest and lockfile unchanged.
