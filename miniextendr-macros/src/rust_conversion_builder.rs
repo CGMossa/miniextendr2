@@ -19,6 +19,9 @@ use syn::spanned::Spanned;
 /// - Coercion → extract R native type + TryCoerce
 /// - Default → TryFromSexp
 pub struct RustConversionBuilder {
+    /// Wrapper parameter holding the R call, with the declaration's syntax context.
+    /// Interpolate it into spanned conversions instead of inheriting user-type hygiene.
+    call_context_ident: syn::Ident,
     /// Enable coercion for all parameters
     coerce_all: bool,
     /// Parameter names that should use coercion
@@ -30,9 +33,10 @@ pub struct RustConversionBuilder {
 }
 
 impl RustConversionBuilder {
-    /// Create a new conversion builder.
-    pub fn new() -> Self {
+    /// Create a conversion builder using the wrapper's call-context parameter.
+    pub fn new(call_context_ident: syn::Ident) -> Self {
         Self {
+            call_context_ident,
             coerce_all: false,
             coerce_params: Vec::new(),
             strict: false,
@@ -93,6 +97,7 @@ impl RustConversionBuilder {
         ty: &syn::Type,
         span: proc_macro2::Span,
     ) -> TokenStream {
+        let call_context_ident = &self.call_context_ident;
         quote_spanned! {span=>
             let #ident: #ty = match #try_expr {
                 Ok(v) => v,
@@ -101,7 +106,7 @@ impl RustConversionBuilder {
                     &format!("{}: {e}", #error_msg),
                     ::miniextendr_api::error_value::kind::CONVERSION,
                     ::core::option::Option::None,
-                    Some(__miniextendr_call),
+                    Some(#call_context_ident),
                 ) },
             };
         }
@@ -115,6 +120,7 @@ impl RustConversionBuilder {
         ident: &syn::Ident,
         span: proc_macro2::Span,
     ) -> TokenStream {
+        let call_context_ident = &self.call_context_ident;
         quote_spanned! {span=>
             let #ident = match #try_expr {
                 Ok(v) => v,
@@ -123,7 +129,7 @@ impl RustConversionBuilder {
                     &format!("{}: {e}", #error_msg),
                     ::miniextendr_api::error_value::kind::CONVERSION,
                     ::core::option::Option::None,
-                    Some(__miniextendr_call),
+                    Some(#call_context_ident),
                 ) },
             };
         }
@@ -201,6 +207,7 @@ impl RustConversionBuilder {
             return (vec![], vec![]);
         };
         let ident = &pat_ident.ident;
+        let call_context_ident = &self.call_context_ident;
         // `r#`-free spelling for synthesized bindings (`__storage_where`).
         let plain = crate::naming::unraw(ident);
         let ty = pat_type.ty.as_ref();
@@ -265,7 +272,7 @@ impl RustConversionBuilder {
                                     &format!("{}: {e}", #em),
                                     ::miniextendr_api::error_value::kind::CONVERSION,
                                     ::core::option::Option::None,
-                                    Some(__miniextendr_call),
+                                    Some(#call_context_ident),
                                 ) },
                             };
                         }
@@ -499,7 +506,7 @@ impl RustConversionBuilder {
                                         &format!("{}: {e}", #error_msg_convert),
                                         ::miniextendr_api::error_value::kind::CONVERSION,
                                         ::core::option::Option::None,
-                                        Some(__miniextendr_call),
+                                        Some(#call_context_ident),
                                     ) },
                                 };
                                 match ::miniextendr_api::TryCoerce::<#target>::try_coerce(__r_val) {
@@ -509,7 +516,7 @@ impl RustConversionBuilder {
                                         &format!("{}: {e}", #error_msg_coerce),
                                         ::miniextendr_api::error_value::kind::CONVERSION,
                                         ::core::option::Option::None,
-                                        Some(__miniextendr_call),
+                                        Some(#call_context_ident),
                                     ) },
                                 }
                             };
@@ -543,7 +550,7 @@ impl RustConversionBuilder {
                                         &format!("{}: {e}", #error_msg_convert),
                                         ::miniextendr_api::error_value::kind::CONVERSION,
                                         ::core::option::Option::None,
-                                        Some(__miniextendr_call),
+                                        Some(#call_context_ident),
                                     ) },
                                 };
                                 let mut __coerced: Vec<#target_elem> = Vec::with_capacity(__r_slice.len());
@@ -570,7 +577,7 @@ impl RustConversionBuilder {
                                         &format!("{}: {__batched}", #error_msg_coerce),
                                         ::miniextendr_api::error_value::kind::CONVERSION,
                                         ::core::option::Option::None,
-                                        Some(__miniextendr_call),
+                                        Some(#call_context_ident),
                                     ) };
                                 }
                             };
@@ -615,12 +622,6 @@ impl RustConversionBuilder {
         }
 
         all_statements
-    }
-}
-
-impl Default for RustConversionBuilder {
-    fn default() -> Self {
-        Self::new()
     }
 }
 
