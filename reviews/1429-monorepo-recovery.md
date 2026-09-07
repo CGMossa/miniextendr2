@@ -74,3 +74,16 @@ checks passed with no generated drift. The two-layout integration test runs
 four real builds and verifies installed calls plus manifest restoration; its
 initial and rebased runs each passed all 40 assertions. The final run also
 left the framework workspace manifest and lockfile unchanged.
+
+The first webR CI run exposed a Mustache rendering difference in the new
+core-library example. R's whisker consumes the fourth closing brace in
+`{{{core_example_prefix}}}}`, removing the Rust function's closing delimiter;
+the CLI's literal substitution preserved it. An intervening space keeps the
+Rust brace separate. A regression now renders both the enabled and commented
+examples through the actual R scaffolder and parses them with rustfmt. It
+failed with the same unclosed-delimiter error before the fix.
+
+The first CRAN-like CI run also reproduced #1326 verbatim: `compare_proxy`
+segfaulted at address `0xa1` while checking `result$total` in the DataFusion
+SUM test. PR #1486 already fixes that Arrow buffer provenance bug and has
+passed its complete CI suite; this PR does not duplicate that runtime change.
