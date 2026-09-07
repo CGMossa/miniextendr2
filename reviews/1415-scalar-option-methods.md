@@ -18,5 +18,11 @@ exercise those supported paths.
 
 A helper `macro_rules!` fixture that spliced caller-authored methods into an
 impl exposed a separate `__miniextendr_call` hygiene failure. The runtime matrix
-now uses explicit impls, matching ordinary class definitions. The first draft
+now uses explicit impls, matching ordinary class definitions. The independent
+hygiene failure is tracked in #1489. The first draft
 also named the removed `ffi` module; Rcomplex is exported at the API crate root.
+
+The first R matrix run passed existing behavior checks but exposed two fixture
+lookup mistakes: S7 registers the unprefixed generic, and a vctrs skip helper
+was local to another test file. Use the generated generic name and a local
+namespace feature probe so this regression file also runs independently.

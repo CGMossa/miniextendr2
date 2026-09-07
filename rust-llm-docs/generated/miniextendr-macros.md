@@ -3009,7 +3009,7 @@ Detects [`ReturnHandling`] for the standalone-`#[miniextendr]`-fn path.
 Identical to [`detect_return_handling`] except that general `Option<T>` maps to
 [`ReturnHandling::OptionIntoR`] (call `into_sexp` on the whole Option, matching the
 historical `analyze_return_type` behavior) rather than [`ReturnHandling::OptionIntoRUnwrap`]
-(the default that preserves impl-method behavior). Use this when building a
+(the fallback for unrecognized impl-method return types). Use this when building a
 [`CWrapperContext`] for a standalone function.
 
 ### `dataframe_derive::derive_dataframe_row`
