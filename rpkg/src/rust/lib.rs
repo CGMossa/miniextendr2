@@ -273,6 +273,7 @@ mod s3_tests;
 mod s4_helpers_tests;
 mod s4_tests;
 mod s7_tests;
+mod scalar_option_return_tests;
 mod scatter_complex_raw_test;
 #[cfg(feature = "serde")]
 mod serde_error_tests;
