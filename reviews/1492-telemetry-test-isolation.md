@@ -13,3 +13,8 @@ Controlled calls on two threads verify exact messages, distinct sources and
 fallback values without depending on event ordering. Successful calls and
 calls after clearing the hook must produce no telemetry. Production code and
 normal test parallelism are unchanged.
+
+Validation passed: `just fmt`, `just check`, the full `just test` suite,
+`just clippy -- -D warnings`, and all three CI Clippy feature configurations.
+The R configure/install/force-document loop and `just llm-docs-check` also
+passed without generated-file changes.
