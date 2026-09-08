@@ -32,3 +32,32 @@ Final validation passed: all 58 configure assertions; the standard R suite
 configurations. `just templates-approve` and `just templates-check` agree.
 R CMD check reports zero errors and zero warnings. Its sole AGENTS.md NOTE
 is tracked by #1409 and already addressed in PR #1487.
+
+
+The first CI minirextendr check passed its tests but failed while retrieving a
+Bioconductor annotation index during the dependency scan. R interpreted three
+packages built inside `test-templates.R` (`testpkg`, `spexport`, `sprename`) as
+undeclared external dependencies, then queried repository indexes to filter
+them. CI skips the expensive runtime fixtures, but its static dependency scan
+still reads their code.
+
+Load the generated package by its computed name and resolve generated exports
+with `getExportedValue`, preserving the public-export assertions. A regression
+runs R's actual dependency scanner over the test tree: it reproduced the three
+false candidates before the change and retains a control that detects an
+undeclared `processx::run` call. No repositories or warning checks are disabled.
+
+The AGENTS.md and help-link notes are fixed by integrating PR #1487, including
+the subsequently identified scaffold ignore-template omissions and their
+`justfile` mappings. The merge conflict in generated `patches/templates.patch`
+was resolved by regeneration with `just templates-approve`, followed by
+`just templates-check`.
+
+The scanner regression fails with `others = testpkg` and
+`imports = spexport, sprename` before the lookup change, and passes all nine
+source-package assertions afterward. R's `.check_packages_used_in_tests` guards
+repository discovery with `any(lengths(res[1L:3L]))`; the now-empty candidate
+lists skip repository selection and `available.packages()` entirely.
+The combined branch passes 869 full-suite assertions (11 existing skips), and
+R CMD check with recursive test-dependency scanning and declared-package Rd
+checking reports zero errors, zero warnings, and zero notes.

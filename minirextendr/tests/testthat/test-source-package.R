@@ -27,3 +27,22 @@ test_that("built source package excludes maintainer files and resolves help link
   xrefs <- tools:::.check_Rd_xrefs(dir = file.path(destination, "minirextendr"))
   expect_identical(format(xrefs), character())
 })
+
+
+test_that("generated test packages are not mistaken for external dependencies", {
+  description <- system.file("DESCRIPTION", package = "minirextendr", mustWork = TRUE)
+  db <- tools:::.read_description(description)
+  files <- list.files(test_path(".."), pattern = "[.]R$", recursive = TRUE, full.names = TRUE)
+  expect_true(any(basename(files) == "test-templates.R"))
+  used <- tools:::.check_packages_used_helper(db, files)
+  expect_identical(used$parse_errors, character())
+  expect_identical(used$others, character())
+  expect_identical(used$imports, character())
+  expect_identical(used$data, character())
+
+  # Real undeclared dependency syntax must still be detected. This is parsed,
+  # never executed; no processx installation or external process is needed.
+  control <- textConnection('processx::run("echo", "dependency control")')
+  on.exit(close(control), add = TRUE)
+  expect_identical(tools:::.check_packages_used_helper(db, control)$imports, "processx")
+})
