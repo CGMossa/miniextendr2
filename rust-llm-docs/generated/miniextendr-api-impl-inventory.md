@@ -236,9 +236,9 @@ Traits with impls: 219
 | `AsFromStr<T>` | `<T> +1wc` | concrete | 3 | miniextendr-api/src/convert.rs:1025 |
 | `AsFromStrVec<T>` | `<T> +1wc` | concrete | 3 | miniextendr-api/src/convert.rs:1067 |
 | `DataFrame` | `` | concrete | 2 | miniextendr-api/src/dataframe.rs:711 |
-| `Factor<'a>` | `<'a>` | concrete | 2 | miniextendr-api/src/factor.rs:222 |
-| `FactorVec<T>` | `<T>` | concrete | 2 | miniextendr-api/src/factor.rs:517 |
-| `FactorOptionVec<T>` | `<T>` | concrete | 2 | miniextendr-api/src/factor.rs:570 |
+| `Factor<'a>` | `<'a>` | concrete | 2 | miniextendr-api/src/factor.rs:223 |
+| `FactorVec<T>` | `<T>` | concrete | 2 | miniextendr-api/src/factor.rs:518 |
+| `FactorOptionVec<T>` | `<T>` | concrete | 2 | miniextendr-api/src/factor.rs:571 |
 | `crate::coerce::Coerced<T, R>` | `<T, R> +3wc` | concrete | 3 | miniextendr-api/src/from_r.rs:1020 |
 | `Vec<i8>` | `` | concrete | 3 | miniextendr-api/src/from_r.rs:1370 |
 | `Vec<i16>` | `` | concrete | 3 | miniextendr-api/src/from_r.rs:1371 |
@@ -759,8 +759,8 @@ Traits with impls: 219
 | `DataFrameError` | `` | concrete | 1 | miniextendr-api/src/dataframe.rs:175 |
 | `ExternalPtr<T>` | `<T>` | concrete | 1 | miniextendr-api/src/externalptr.rs:1961 |
 | `ExternalPtr<T>` | `<T>` | concrete | 1 | miniextendr-api/src/externalptr.rs:1968 |
-| `FactorVec<T>` | `<T>` | concrete | 1 | miniextendr-api/src/factor.rs:482 |
-| `FactorOptionVec<T>` | `<T>` | concrete | 1 | miniextendr-api/src/factor.rs:540 |
+| `FactorVec<T>` | `<T>` | concrete | 1 | miniextendr-api/src/factor.rs:483 |
+| `FactorOptionVec<T>` | `<T>` | concrete | 1 | miniextendr-api/src/factor.rs:541 |
 | `SexpError` | `` | concrete | 1 | miniextendr-api/src/from_r.rs:303 |
 | `SexpError` | `` | concrete | 1 | miniextendr-api/src/from_r.rs:309 |
 | `SexpError` | `` | concrete | 1 | miniextendr-api/src/from_r.rs:315 |
@@ -839,8 +839,8 @@ Traits with impls: 219
 | `AsDisplayVec<T>` | `<T>` | concrete | 3 | miniextendr-api/src/convert.rs:991 |
 | `DataFrame` | `` | concrete | 4 | miniextendr-api/src/dataframe.rs:719 |
 | `BuiltDataFrame` | `` | concrete | 4 | miniextendr-api/src/dataframe.rs:927 |
-| `FactorVec<T>` | `<T>` | concrete | 4 | miniextendr-api/src/factor.rs:501 |
-| `FactorOptionVec<T>` | `<T>` | concrete | 4 | miniextendr-api/src/factor.rs:610 |
+| `FactorVec<T>` | `<T>` | concrete | 4 | miniextendr-api/src/factor.rs:502 |
+| `FactorOptionVec<T>` | `<T>` | concrete | 4 | miniextendr-api/src/factor.rs:611 |
 | `BTreeSet<i8>` | `` | concrete | 4 | miniextendr-api/src/into_r.rs:1038 |
 | `HashSet<i8>` | `` | concrete | 4 | miniextendr-api/src/into_r.rs:1038 |
 | `BTreeSet<i16>` | `` | concrete | 4 | miniextendr-api/src/into_r.rs:1039 |
@@ -1674,8 +1674,8 @@ Traits with impls: 219
 | `TypeMismatchError` | `` | concrete | 1 | miniextendr-api/src/externalptr.rs:1720 |
 | `ExternalPtr<T>` | `<T>` | concrete | 1 | miniextendr-api/src/externalptr.rs:1875 |
 | `RSidecar` | `` | concrete | 1 | miniextendr-api/src/externalptr/altrep_helpers.rs:173 |
-| `FactorVec<T>` | `<T>` | concrete | 1 | miniextendr-api/src/factor.rs:467 |
-| `FactorOptionVec<T>` | `<T>` | concrete | 1 | miniextendr-api/src/factor.rs:525 |
+| `FactorVec<T>` | `<T>` | concrete | 1 | miniextendr-api/src/factor.rs:468 |
+| `FactorOptionVec<T>` | `<T>` | concrete | 1 | miniextendr-api/src/factor.rs:526 |
 | `GuardMode` | `` | concrete | 1 | miniextendr-api/src/ffi_guard.rs:48 |
 | `SexpTypeError` | `` | concrete | 1 | miniextendr-api/src/from_r.rs:182 |
 | `SexpLengthError` | `` | concrete | 1 | miniextendr-api/src/from_r.rs:203 |
@@ -1796,8 +1796,8 @@ Traits with impls: 219
 | `TypeMismatchError` | `` | concrete | 1 | miniextendr-api/src/externalptr.rs:1720 |
 | `ExternalPtr<T>` | `<T>` | concrete | 2 | miniextendr-api/src/externalptr.rs:1851 |
 | `RSidecar` | `` | concrete | 1 | miniextendr-api/src/externalptr/altrep_helpers.rs:173 |
-| `FactorVec<T>` | `<T>` | concrete | 1 | miniextendr-api/src/factor.rs:467 |
-| `FactorOptionVec<T>` | `<T>` | concrete | 1 | miniextendr-api/src/factor.rs:525 |
+| `FactorVec<T>` | `<T>` | concrete | 1 | miniextendr-api/src/factor.rs:468 |
+| `FactorOptionVec<T>` | `<T>` | concrete | 1 | miniextendr-api/src/factor.rs:526 |
 | `GuardMode` | `` | concrete | 1 | miniextendr-api/src/ffi_guard.rs:48 |
 | `SexpTypeError` | `` | concrete | 1 | miniextendr-api/src/from_r.rs:182 |
 | `SexpLengthError` | `` | concrete | 1 | miniextendr-api/src/from_r.rs:203 |
@@ -2670,10 +2670,10 @@ Traits with impls: 219
 | `Coerced<T, R>` | `<T, R>` | concrete | 2 | miniextendr-api/src/coerce.rs:954 |
 | `BuiltDataFrame` | `` | concrete | 2 | miniextendr-api/src/dataframe.rs:911 |
 | `ExternalPtr<T>` | `<T>` | concrete | 2 | miniextendr-api/src/externalptr.rs:1807 |
-| `Factor<'_>` | `` | concrete | 2 | miniextendr-api/src/factor.rs:213 |
-| `FactorMut<'_>` | `` | concrete | 2 | miniextendr-api/src/factor.rs:309 |
-| `FactorVec<T>` | `<T>` | concrete | 2 | miniextendr-api/src/factor.rs:488 |
-| `FactorOptionVec<T>` | `<T>` | concrete | 2 | miniextendr-api/src/factor.rs:546 |
+| `Factor<'_>` | `` | concrete | 2 | miniextendr-api/src/factor.rs:214 |
+| `FactorMut<'_>` | `` | concrete | 2 | miniextendr-api/src/factor.rs:310 |
+| `FactorVec<T>` | `<T>` | concrete | 2 | miniextendr-api/src/factor.rs:489 |
+| `FactorOptionVec<T>` | `<T>` | concrete | 2 | miniextendr-api/src/factor.rs:547 |
 | `Root<'a>` | `<'a>` | concrete | 2 | miniextendr-api/src/gc_protect.rs:1063 |
 | `OwnedProtect` | `` | concrete | 2 | miniextendr-api/src/gc_protect.rs:1151 |
 | `Protected<'a, T>` | `<'a, T>` | concrete | 2 | miniextendr-api/src/gc_protect.rs:1265 |
@@ -2962,9 +2962,9 @@ Traits with impls: 219
 |---|---|---|---|---|
 | `Coerced<T, R>` | `<T, R>` | concrete | 1 | miniextendr-api/src/coerce.rs:963 |
 | `ExternalPtr<T>` | `<T>` | concrete | 1 | miniextendr-api/src/externalptr.rs:1816 |
-| `FactorMut<'_>` | `` | concrete | 1 | miniextendr-api/src/factor.rs:318 |
-| `FactorVec<T>` | `<T>` | concrete | 1 | miniextendr-api/src/factor.rs:495 |
-| `FactorOptionVec<T>` | `<T>` | concrete | 1 | miniextendr-api/src/factor.rs:553 |
+| `FactorMut<'_>` | `` | concrete | 1 | miniextendr-api/src/factor.rs:319 |
+| `FactorVec<T>` | `<T>` | concrete | 1 | miniextendr-api/src/factor.rs:496 |
+| `FactorOptionVec<T>` | `<T>` | concrete | 1 | miniextendr-api/src/factor.rs:554 |
 | `Altrep<T>` | `<T>` | concrete | 1 | miniextendr-api/src/into_r/altrep.rs:141 |
 | `JiffTimestampVecMut` | `` | concrete | 1 | miniextendr-api/src/optionals/jiff_impl.rs:874 |
 | `JiffZonedVecMut` | `` | concrete | 1 | miniextendr-api/src/optionals/jiff_impl.rs:915 |
@@ -3801,7 +3801,7 @@ Traits with impls: 219
 
 | for-type | generics | kind | #items | span |
 |---|---|---|---|---|
-| `T` | `<T>` | concrete | 3 | miniextendr-api/src/factor.rs:560 |
+| `T` | `<T>` | concrete | 3 | miniextendr-api/src/factor.rs:561 |
 
 ## `Zeroable` — 1 impls
 
