@@ -24,3 +24,19 @@ undeclared test dependencies with dummy packages. `MASS` was installed in
 `.Library` but hidden by that test library. The artifact test now temporarily
 puts `.Library` first for the metadata scan; declared-package link checking
 remains enabled. This does not add a runtime dependency on recommended packages.
+
+The follow-up template audit found the same omission in both scaffold
+`Rbuildignore` templates: neither excluded `AGENTS.md` or `CLAUDE.md`.
+`templates-check` had passed because `justfile` did not map either
+`Rbuildignore` template to `rpkg/.Rbuildignore`. Added both mappings, ported the
+existing rpkg exclusions, and regenerated the approved delta. The agent-skill
+installer now also excludes the `AGENTS.md` it writes when used directly in an
+existing R package.
+
+The extended regressions failed seven assertions before the fix: actual
+standalone and monorepo template tarballs contained both agent files, and the
+skill installer left its AGENTS.md unignored. After the fix, the focused ignore,
+skill, and source-package suites pass 91 assertions with no failures, warnings,
+or skips. The tarball tests retain README.md, so the exclusions cannot pass by
+blanket-filtering Markdown files. Re-running the installer retains user-owned
+AGENTS.md content and deduplicates the exclusion.
