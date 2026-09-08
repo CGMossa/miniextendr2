@@ -20,3 +20,15 @@ crate, so no network or Rust compilation is needed. Sources and archives
 are checked for content changes; rejected cases must not create build files
 or unpack vendor sources. Before the fix, the two leak cases failed twelve
 assertions while the legitimate install cases passed.
+
+The first package check caught an undeclared processx dependency in the new
+test harness. The harness now uses base R's `system2()` with output directed
+to log files, so expected configure failures return exit statuses without
+adding a dependency or emitting R warnings.
+
+Final validation passed: all 58 configure assertions; the standard R suite
+(849 assertions, zero failures/warnings); `just fmt`, `just check`, full
+`just test`, `just clippy -- -D warnings`, and all three CI Clippy feature
+configurations. `just templates-approve` and `just templates-check` agree.
+R CMD check reports zero errors and zero warnings. Its sole AGENTS.md NOTE
+is tracked by #1409 and already addressed in PR #1487.

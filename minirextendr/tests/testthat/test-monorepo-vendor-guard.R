@@ -60,11 +60,17 @@ test_that("monorepo configure rejects leaked tarballs without blocking builds", 
       })
       archive_before <- tools::md5sum(archive)
     }
-    generated <- processx::run("autoconf", wd = pkg, error_on_status = FALSE)
-    expect_identical(generated$status, 0L, info = generated$stderr)
-    configured <- processx::run("bash", "./configure", wd = pkg, error_on_status = FALSE)
-    output <- paste(configured$stdout, configured$stderr)
-    expect_identical(configured$status, if (reject) 1L else 0L,
+    log <- file.path(root, "autoconf.log")
+    generated <- withr::with_dir(pkg, {
+      system2("autoconf", stdout = log, stderr = log)
+    })
+    expect_identical(generated, 0L, info = paste(readLines(log), collapse = "\n"))
+    log <- file.path(root, "configure.log")
+    configured <- withr::with_dir(pkg, {
+      system2("bash", "./configure", stdout = log, stderr = log)
+    })
+    output <- paste(readLines(log), collapse = "\n")
+    expect_identical(configured, if (reject) 1L else 0L,
                      info = paste(name, output))
     if (reject) {
       expect_match(output, "leaked vendor tarball detected", fixed = TRUE)
