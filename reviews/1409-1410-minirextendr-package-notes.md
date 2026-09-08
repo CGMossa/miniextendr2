@@ -40,3 +40,9 @@ skill, and source-package suites pass 91 assertions with no failures, warnings,
 or skips. The tarball tests retain README.md, so the exclusions cannot pass by
 blanket-filtering Markdown files. Re-running the installer retains user-owned
 AGENTS.md content and deduplicates the exclusion.
+
+After rebasing onto current main, the complete minirextendr suite passes 805
+assertions (11 existing skips, no failures or warnings). The built-package
+check with declared-package Rd checking reports zero errors, zero warnings,
+and zero notes. All three CI Clippy configurations and template drift checks
+also pass.
