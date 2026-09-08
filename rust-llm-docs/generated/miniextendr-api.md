@@ -32119,6 +32119,9 @@ fn build_factor(indices: &[i32], levels: crate::SEXP) -> crate::SEXP
 
 Build a factor SEXP from indices and a levels STRSXP.
 
+The caller must keep `levels` rooted across this call. The factor is rooted
+during construction; the returned SEXP must be protected or returned to R.
+
 ### `factor::build_factor_with_levels`
 
 ```rust
@@ -32127,8 +32130,8 @@ fn build_factor_with_levels(indices: &[i32], level_names: &[&str]) -> crate::SEX
 
 Build a factor SEXP from indices and level names in a single call.
 
-Builds the levels STRSXP via [`build_levels_sexp`] and protects it
-across the [`build_factor`] allocation, so callers don't need to manage
+Keeps the levels STRSXP rooted from allocation through [`build_factor`],
+so callers don't need to manage
 the levels protection themselves. The returned factor SEXP is **not**
 protected — caller must protect or return it.
 
@@ -32137,10 +32140,8 @@ repeated calls with the same levels prefer caching via
 [`build_levels_sexp_cached`] (no protection needed because the cached
 SEXP is on R's precious list).
 
-See CLAUDE.md "PROTECT discipline against R-devel GC" for why this
-matters even though `build_levels_sexp` uses symbol PRINTNAMEs for the
-per-element CHARSXPs — the container STRSXP itself is freshly allocated
-and unprotected.
+Symbol PRINTNAMEs keep individual level strings alive, but the fresh
+levels container and factor payload also need roots while being built.
 
 ### `factor::build_levels_sexp`
 

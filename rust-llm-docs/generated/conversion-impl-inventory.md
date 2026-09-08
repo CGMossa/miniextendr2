@@ -26,9 +26,9 @@ Traits with impls: 9
 | `AsFromStr<T>` | `<T> +1wc` | concrete | 3 | miniextendr-api/src/convert.rs:1025 |
 | `AsFromStrVec<T>` | `<T> +1wc` | concrete | 3 | miniextendr-api/src/convert.rs:1067 |
 | `DataFrame` | `` | concrete | 2 | miniextendr-api/src/dataframe.rs:711 |
-| `Factor<'a>` | `<'a>` | concrete | 2 | miniextendr-api/src/factor.rs:222 |
-| `FactorVec<T>` | `<T>` | concrete | 2 | miniextendr-api/src/factor.rs:517 |
-| `FactorOptionVec<T>` | `<T>` | concrete | 2 | miniextendr-api/src/factor.rs:570 |
+| `Factor<'a>` | `<'a>` | concrete | 2 | miniextendr-api/src/factor.rs:223 |
+| `FactorVec<T>` | `<T>` | concrete | 2 | miniextendr-api/src/factor.rs:518 |
+| `FactorOptionVec<T>` | `<T>` | concrete | 2 | miniextendr-api/src/factor.rs:571 |
 | `crate::coerce::Coerced<T, R>` | `<T, R> +3wc` | concrete | 3 | miniextendr-api/src/from_r.rs:1020 |
 | `Vec<i8>` | `` | concrete | 3 | miniextendr-api/src/from_r.rs:1370 |
 | `Vec<i16>` | `` | concrete | 3 | miniextendr-api/src/from_r.rs:1371 |
@@ -549,8 +549,8 @@ Traits with impls: 9
 | `AsDisplayVec<T>` | `<T>` | concrete | 3 | miniextendr-api/src/convert.rs:991 |
 | `DataFrame` | `` | concrete | 4 | miniextendr-api/src/dataframe.rs:719 |
 | `BuiltDataFrame` | `` | concrete | 4 | miniextendr-api/src/dataframe.rs:927 |
-| `FactorVec<T>` | `<T>` | concrete | 4 | miniextendr-api/src/factor.rs:501 |
-| `FactorOptionVec<T>` | `<T>` | concrete | 4 | miniextendr-api/src/factor.rs:610 |
+| `FactorVec<T>` | `<T>` | concrete | 4 | miniextendr-api/src/factor.rs:502 |
+| `FactorOptionVec<T>` | `<T>` | concrete | 4 | miniextendr-api/src/factor.rs:611 |
 | `BTreeSet<i8>` | `` | concrete | 4 | miniextendr-api/src/into_r.rs:1038 |
 | `HashSet<i8>` | `` | concrete | 4 | miniextendr-api/src/into_r.rs:1038 |
 | `BTreeSet<i16>` | `` | concrete | 4 | miniextendr-api/src/into_r.rs:1039 |

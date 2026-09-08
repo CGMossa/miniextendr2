@@ -25,3 +25,18 @@ allocating again, and `build_factor` callers keep input levels rooted.
 The fresh-process test runs in GC-stress CI shard 1. The no-argument fixture also
 participates in the existing dynamic sweep; the dedicated subprocess assertion
 is needed because that sweep can warm the caches in earlier fixtures.
+
+With the final allocation sizes, the original constructors pass three rounds
+without forced GC but fail the fresh-process stress regression with a
+`callr_timeout_error` after 120 seconds. The protected constructors pass all 39
+assertions in that same regression. Existing factor, Arrow, dataframe-reader,
+dataframe-enum, and columnar-flatten suites pass 827 assertions with no
+failures, warnings, or skips.
+
+`just fmt`, `just check`, full `just test` (including both UI suites),
+`just clippy -- -D warnings`, and all three CI Clippy configurations pass.
+The UI suite's deliberate impl-tag warning fixtures remain expected output.
+The worktree R package was configured, installed, and documented; the new export
+was installed twice before runtime testing. The Rust API corpus was regenerated.
+`just templates-check` passes; this runtime change touches no source in the
+`templates-sources` mapping.
